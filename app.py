@@ -1,5 +1,7 @@
 from cs50 import SQL
-from flask import Flask, redirect, render_template, request, flash
+from flask import Flask, redirect, render_template, flash, request
+from datetime import datetime
+from pytz import timezone
 
 
 # Configure application
@@ -11,19 +13,19 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///birthdays.db")
 
-# Secret key
+# Setting a random secret key
 app.secret_key = b'_5#y2L"2dn399q3bfjkbqk23ie3imdd3'
 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        # Add the user's entry into the database
         name = request.form.get("name")
+        email = request.form.get("email")
         month = request.form.get("month")
         day = request.form.get("day")
 
-        for chave, valor in {'Nome': name, 'Mês': month, 'Dia': day}.items():
+        for chave, valor in {'Nome': name, 'E-mail': email, 'Mês': month, 'Dia': day}.items():
             if not valor:
                 return render_template('erro.html', erro=f"{chave} não digitado!")
         
@@ -34,33 +36,41 @@ def index():
             return render_template('erro.html', erro=f"Fevereiro não tem dia {int(day)}!")
 
         name = name.strip().capitalize().split()[0]
+        email = email.strip()
 
-        db.execute("INSERT INTO birthdays (name, month, day) VALUES (?, ?, ?)", name, month, day)
+        db.execute("INSERT INTO birthdays (name, email, month, day) VALUES (?, ?, ?, ?)", name, email, month, day)
 
         flash(f'Aniversário de {name} adicionado!')
 
         return redirect("/")
 
-    else:
-        # Display the entries in the database on index.html
+    elif request.method == "GET":
         rows = db.execute("SELECT * FROM birthdays")
+        textos, emails = [], []
+
+        for row in rows:
+            day, month = str(row["day"]), str(row["month"])
+
+            day = day if len(day) == 2 else '0' + day
+            month = month if len(month) == 2 else '0' + month
+
+            niver = f'{day}/{month}'
+            hoje = datetime.now(timezone('America/Recife')).strftime("%d/%m")
+
+            if niver == hoje:
+                nome = row["name"]
+                email = row["email"]
+                texto = f'Hoje é o aniversário de {nome}! Clique aqui para enviar os parabéns.'
+
+                textos.append(texto)
+                emails.append(email)
 
         return render_template("index.html", rows=rows)
 
 @app.route("/email_parabens", methods=["GET", "POST"])
-def email_parabens():
+def email_parabens(textos, emails):
     if request.method == 'GET':
-        textos, emails = [], []
-        rows = db.execute("SELECT * FROM birthdays")  # ta certo?
-
-        for row in rows:  # iterar sobre as rows da db
-            if ... == ...:  # data da row == data de hoje
-                nome = ...
-
-            texto = f'Hoje é o aniversário de {nome}! Clique aqui para enviar os parabéns.'
-            email = ...
-
-            textos.append(texto)
-            emails.append(email)
-
         return render_template('email_parabens.html', textos=textos, emails=emails)
+
+    elif request.method == 'POST':
+        pass

@@ -58,13 +58,17 @@ button, input[type="submit"] {
 }
 
 input[type="text"], input[type="number"] {
-    line-height: 1.8;
-    width: 25%;
+    line-height: 2;
+    width: 20%;
 }
 
 input[type="text"]:hover, input[type="number"]:hover {
     background-color: white;
     transition: color 2s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+::placeholder {
+    color: rgba(0, 0, 0, 0.74);
 }
 
 table {
@@ -99,3 +103,4 @@ a.voltar {
 #flash {
     color: black;
 }
+
