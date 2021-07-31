@@ -1,6 +1,6 @@
 body {
-    background-color: #fff;
-    color: #212529;
+    background-color: #212529;
+    color: white;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
@@ -18,14 +18,15 @@ body {
 }
 
 .jumbotron {
-    background-color: #63b0aa;
-    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #63b0aa;
     margin-bottom: 2rem;
     padding: 2rem 1rem;
     text-align: center;
 }
 
 .section {
+    margin-bottom: 2rem;
     padding-bottom: 1rem;
     padding-left: 2rem;
     padding-right: 2rem;
@@ -33,7 +34,7 @@ body {
 }
 
 .section:hover {
-    background-color: #f5f5f5;
+    background-color: rgba(0, 0, 0, 0.5);
     transition: color 2s ease-in-out, background-color 0.15s ease-in-out;
 }
 
@@ -43,7 +44,7 @@ h1 {
 }
 
 button, input[type="submit"] {
-    background-color: #d9edff;
+    background-color: #63b0aa;
     border: 1px solid transparent;
     border-radius: 0.25rem;
     font-size: 0.95rem;
@@ -61,7 +62,7 @@ input[type="text"], input[type="number"] {
 }
 
 input[type="text"]:hover, input[type="number"]:hover {
-    background-color: #f5f5f5;
+    background-color: white;
     transition: color 2s ease-in-out, background-color 0.15s ease-in-out;
 }
 
