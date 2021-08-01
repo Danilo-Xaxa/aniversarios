@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    E-mail de parabéns
+{% endblock %}
+
+{% block main %}
+        <main>
+            <section>
+            <form action="/personalizado" method="post">
+                <h2 class="outrosH2">Digite sua mensagem de parabéns:</h2>
+                <textarea name="msg_personalizada" id="msgPersonalizada" cols="70" rows="5"></textarea>
+                <input type="submit" name="enviar" value="Enviar e-mail">
+            </form>
+            <a class="voltar" href="/">Voltar</a> <!-- Voltar pra o /email_parabens na real-->
+            </section>
+        </main>
+{% endblock %}

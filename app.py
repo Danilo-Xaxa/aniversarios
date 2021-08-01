@@ -30,7 +30,7 @@ EMAIL_SENHA = getenv('EMAIL_SENHA')
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    global servidor
+    global servidor_smtp
     if request.method == "POST":
         name = request.form.get("name")
         email = request.form.get("email")
@@ -78,9 +78,9 @@ def index():
                 session['emails'].append(row["email"])
 
                 if counter == len(rows) - 1:  # fazer só na última vez
-                    servidor = SMTP("smtp.gmail.com", 587)
-                    servidor.starttls()
-                    servidor.login(EMAIL_REMETENTE, EMAIL_SENHA)
+                    servidor_smtp = SMTP("smtp.gmail.com", 587)
+                    servidor_smtp.starttls()
+                    servidor_smtp.login(EMAIL_REMETENTE, EMAIL_SENHA)
 
         return render_template("index.html", rows=rows, textos=textos, aniversariantes=session['aniversariantes'])
 
@@ -93,16 +93,17 @@ def email_parabens():
         return render_template('email_parabens.html')
 
     elif request.method == 'POST':
-        if request.form['padrao'] == 'Enviar e-mail padrão':
+        if request.form.get('padrao') == 'Enviar e-mail padrão':
             desejou = request.form.get('name')
             assunto = "Feliz aniversário!"
             mensagem = f"Parabéns, {session['aniversariante']}! {desejou.strip().capitalize()} te desejou um feliz aniversário :)"
             assunto_mensagem = (f"Subject: {assunto}\n\n{mensagem}")
-            servidor.sendmail(EMAIL_REMETENTE, session['email'], assunto_mensagem.encode("utf8"))
+            servidor_smtp.sendmail(EMAIL_REMETENTE, session['email'], assunto_mensagem.encode("utf8"))
 
             return render_template('enviado.html', mensagem=mensagem)
 
-        elif request.form['personalizado'] == 'Enviar e-mail personalizado':
+        elif request.form.get('personalizado') == 'Enviar e-mail personalizado':
+            session['desejou'] = request.form.get('name')
             return redirect('/personalizado')
 
 @app.route("/personalizado", methods=["GET", "POST"])
@@ -111,4 +112,10 @@ def personalizado():
         return render_template('personalizado.html')
 
     elif request.method == 'POST':
-        pass
+        mensagem = request.form.get('msg_personalizada')
+        desejou = session['desejou']
+        assunto = f"{desejou} te enviou este e-mail: "
+        assunto_mensagem = (f"Subject: {assunto}\n\n{mensagem}")
+        servidor_smtp.sendmail(EMAIL_REMETENTE, session['email'], assunto_mensagem.encode("utf8"))
+
+        return render_template('enviado.html', mensagem=assunto+mensagem)
