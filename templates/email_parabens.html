@@ -6,7 +6,14 @@
 
 {% block main %}
         <main>
-            <h2> E-mail de parabéns </h2>
+            <section>
+            <form action="/email_parabens" method="post">
+                <input autocomplete="off" autofocus name="name" placeholder="Seu nome" type="text">
+                <h2 class="outrosH2"> Escolha uma opção: </h2>
+                <input type="submit" name="personalizado" value="Enviar e-mail personalizado">
+                <input type="submit" name="padrao" value="Enviar e-mail padrão">
+            </form>
             <a class="voltar" href="/">Voltar</a>
+            </section>
         </main>
 {% endblock %}

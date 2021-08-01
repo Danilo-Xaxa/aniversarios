@@ -1,14 +1,20 @@
 from cs50 import SQL
-from flask import Flask, redirect, render_template, flash, request
+from flask import Flask, redirect, render_template, flash, session, request
+from flask_session import Session
+from smtplib import SMTP
 from datetime import datetime
 from pytz import timezone
+from os import getenv
 
 
 # Configure application
 app = Flask(__name__)
 
-# Ensure templates are auto-reloaded
+# Ensure templates are auto-reloaded and configuring the session
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///birthdays.db")
@@ -58,19 +64,45 @@ def index():
             hoje = datetime.now(timezone('America/Recife')).strftime("%d/%m")
 
             if niver == hoje:
-                nome = row["name"]
-                email = row["email"]
-                texto = f'Hoje é o aniversário de {nome}! Clique aqui para enviar os parabéns.'
+                textos.append(f'Hoje é o aniversário de {row["name"]}!')
+                emails.append(row["email"])
+                session['aniversariante'] = row["name"]
+                session['email'] = row["email"]
 
-                textos.append(texto)
-                emails.append(email)
 
-        return render_template("index.html", rows=rows)
+
+        return render_template("index.html", rows=rows, textos=textos, emails=emails)
 
 @app.route("/email_parabens", methods=["GET", "POST"])
-def email_parabens(textos, emails):
+def email_parabens():
+    aniversariante = session.get('aniversariante')
+    email = session.get('email')
+
     if request.method == 'GET':
-        return render_template('email_parabens.html', textos=textos, emails=emails)
+        return render_template('email_parabens.html')
+
+    if request.method == 'POST':
+        if request.form['personalizado']:
+            return redirect('/personalizado')
+
+        elif request.form['padrao']:
+            desejou = request.form.get('name')
+            mensagem = f'Parabéns, {aniversariante}! {desejou.strip().capitalize()} te desejou um feliz aniversário :)'
+
+            EMAIL_REMETENTE = getenv('EMAIL_REMETENTE')
+            EMAIL_SENHA = getenv('EMAIL_SENHA')
+
+            servidor = SMTP("smtp.gmail.com", 587)
+            servidor.starttls()
+            servidor.login(EMAIL_REMETENTE, EMAIL_SENHA)
+            servidor.sendmail(EMAIL_REMETENTE, email, mensagem.encode("utf8"))
+
+            return render_template('enviado.html', mensagem=mensagem)
+
+@app.route("/personalizado", methods=["GET", "POST"])
+def personalizado():
+    if request.method == 'GET':
+        return render_template('personalizado.html')
 
     elif request.method == 'POST':
         pass

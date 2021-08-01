@@ -57,12 +57,12 @@ button, input[type="submit"] {
     vertical-align: middle;
 }
 
-input[type="text"], input[type="number"] {
+input[type="text"], input[type="number"], input[type="email"] {
     line-height: 2;
     width: 20%;
 }
 
-input[type="text"]:hover, input[type="number"]:hover {
+input[type="text"]:hover, input[type="number"]:hover, input[type="email"]:hover {
     background-color: white;
     transition: color 2s ease-in-out, background-color 0.15s ease-in-out;
 }
@@ -91,16 +91,31 @@ h2 {
     color: white;
 }
 
-a.voltar {
+a {
     font-size: 25px;
     color: yellow;
 }
 
+a:hover {
+    color: yellow;
+}
+
+h2 > a {
+    color: yellow;
+    font-size: inherit;
+}
+
 #niver {
-    display: none;
 }
 
 #flash {
     color: black;
 }
 
+.outrosH2 {
+    margin-top: 10px;
+}
+
+input[name="personalizado"], input[name="padrao"] {
+    margin: 5px;
+}
