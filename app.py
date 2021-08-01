@@ -69,8 +69,6 @@ def index():
                 session['aniversariante'] = row["name"]
                 session['email'] = row["email"]
 
-
-
         return render_template("index.html", rows=rows, textos=textos, emails=emails)
 
 @app.route("/email_parabens", methods=["GET", "POST"])
@@ -81,11 +79,9 @@ def email_parabens():
     if request.method == 'GET':
         return render_template('email_parabens.html')
 
-    if request.method == 'POST':
-        if request.form['personalizado']:
-            return redirect('/personalizado')
-
-        elif request.form['padrao']:
+    elif request.method == 'POST':
+        print('DAQUI PRA BAIXO NÃO FUNFA GRRRRRRRRRRRR')
+        if request.form['botao'] == 'Enviar e-mail padrão':
             desejou = request.form.get('name')
             mensagem = f'Parabéns, {aniversariante}! {desejou.strip().capitalize()} te desejou um feliz aniversário :)'
 
@@ -98,6 +94,9 @@ def email_parabens():
             servidor.sendmail(EMAIL_REMETENTE, email, mensagem.encode("utf8"))
 
             return render_template('enviado.html', mensagem=mensagem)
+
+        elif request.form['botao'] == 'Enviar e-mail personalizado':
+            return redirect('/personalizado')
 
 @app.route("/personalizado", methods=["GET", "POST"])
 def personalizado():
