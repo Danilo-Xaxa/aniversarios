@@ -25,8 +25,8 @@
             <section id="niver">
                 {% if textos %}
                     {% for texto in textos %}
-                        <h2>{{ texto }}</h2>
-                        <h2><a href="/email_parabens">Clique aqui</a> para enviar os parabéns</h2>
+                        <h2 class="niverDeQuem">{{ texto }}</h2>
+                        <h2 class="cliqueAqui"><a href="javascript:redirecionar('{{ loop.index - 1 }}');" id="{{ aniversariantes[loop.index - 1] }}">Clique aqui</a> para enviar os parabéns</h2>
                     {% endfor %}
                 {% endif %}
             </section>
@@ -61,4 +61,5 @@
                 </table>
             </section>
         </main>
+        <script src="../static/script.js"></script>
 {% endblock %}

@@ -119,3 +119,19 @@ h2 > a {
 input[name="personalizado"], input[name="padrao"] {
     margin: 5px;
 }
+
+#mensagem {
+    color: #52a59e;
+}
+
+#niver > h2 {
+    margin-top: 15px;
+}
+
+#niver > .niverDeQuem {
+    color: white;
+}
+
+#niver > .cliqueAqui {
+    color: #52a59e;
+}

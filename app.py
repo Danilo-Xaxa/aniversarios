@@ -23,8 +23,14 @@ db = SQL("sqlite:///birthdays.db")
 app.secret_key = b'_5#y2L"2dn399q3bfjkbqk23ie3imdd3'
 
 
+global EMAIL_REMETENTE, EMAIL_SENHA
+EMAIL_REMETENTE = getenv('EMAIL_REMETENTE')
+EMAIL_SENHA = getenv('EMAIL_SENHA')
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
+    global servidor
     if request.method == "POST":
         name = request.form.get("name")
         email = request.form.get("email")
@@ -53,8 +59,10 @@ def index():
     elif request.method == "GET":
         rows = db.execute("SELECT * FROM birthdays")
         textos, emails = [], []
+        session['aniversariantes'] = []
+        session['emails'] = []
 
-        for row in rows:
+        for counter, row in enumerate(rows):
             day, month = str(row["day"]), str(row["month"])
 
             day = day if len(day) == 2 else '0' + day
@@ -66,36 +74,35 @@ def index():
             if niver == hoje:
                 textos.append(f'Hoje é o aniversário de {row["name"]}!')
                 emails.append(row["email"])
-                session['aniversariante'] = row["name"]
-                session['email'] = row["email"]
+                session['aniversariantes'].append(row["name"])
+                session['emails'].append(row["email"])
 
-        return render_template("index.html", rows=rows, textos=textos, emails=emails)
+                if counter == len(rows) - 1:  # fazer só na última vez
+                    servidor = SMTP("smtp.gmail.com", 587)
+                    servidor.starttls()
+                    servidor.login(EMAIL_REMETENTE, EMAIL_SENHA)
+
+        return render_template("index.html", rows=rows, textos=textos, aniversariantes=session['aniversariantes'])
 
 @app.route("/email_parabens", methods=["GET", "POST"])
 def email_parabens():
-    aniversariante = session.get('aniversariante')
-    email = session.get('email')
-
     if request.method == 'GET':
+        indice = int(request.args.get('aniversariante'))
+        session['aniversariante'] = session.get('aniversariantes')[indice]
+        session['email'] = session.get('emails')[indice]
         return render_template('email_parabens.html')
 
     elif request.method == 'POST':
-        print('DAQUI PRA BAIXO NÃO FUNFA GRRRRRRRRRRRR')
-        if request.form['botao'] == 'Enviar e-mail padrão':
+        if request.form['padrao'] == 'Enviar e-mail padrão':
             desejou = request.form.get('name')
-            mensagem = f'Parabéns, {aniversariante}! {desejou.strip().capitalize()} te desejou um feliz aniversário :)'
-
-            EMAIL_REMETENTE = getenv('EMAIL_REMETENTE')
-            EMAIL_SENHA = getenv('EMAIL_SENHA')
-
-            servidor = SMTP("smtp.gmail.com", 587)
-            servidor.starttls()
-            servidor.login(EMAIL_REMETENTE, EMAIL_SENHA)
-            servidor.sendmail(EMAIL_REMETENTE, email, mensagem.encode("utf8"))
+            assunto = "Feliz aniversário!"
+            mensagem = f"Parabéns, {session['aniversariante']}! {desejou.strip().capitalize()} te desejou um feliz aniversário :)"
+            assunto_mensagem = (f"Subject: {assunto}\n\n{mensagem}")
+            servidor.sendmail(EMAIL_REMETENTE, session['email'], assunto_mensagem.encode("utf8"))
 
             return render_template('enviado.html', mensagem=mensagem)
 
-        elif request.form['botao'] == 'Enviar e-mail personalizado':
+        elif request.form['personalizado'] == 'Enviar e-mail personalizado':
             return redirect('/personalizado')
 
 @app.route("/personalizado", methods=["GET", "POST"])
