@@ -148,3 +148,22 @@ textarea {
     margin-right: auto;
     margin-bottom: 10px;
 }
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    text-align: center;
+    height: 40px;
+    margin-top: auto;
+}
+
+footer * {
+    font-size: 20px;
+    margin: 5px auto 5px auto;
+}
