@@ -87,9 +87,9 @@ def index():
 @app.route("/email_parabens", methods=["GET", "POST"])
 def email_parabens():
     if request.method == 'GET':
-        indice = int(request.args.get('aniversariante'))
-        session['aniversariante'] = session.get('aniversariantes')[indice]
-        session['email'] = session.get('emails')[indice]
+        session['indice'] = int(request.args.get('aniversariante'))
+        session['aniversariante'] = session.get('aniversariantes')[session['indice']]
+        session['email'] = session.get('emails')[session['indice']]
         return render_template('email_parabens.html')
 
     elif request.method == 'POST':
@@ -109,7 +109,7 @@ def email_parabens():
 @app.route("/personalizado", methods=["GET", "POST"])
 def personalizado():
     if request.method == 'GET':
-        return render_template('personalizado.html')
+        return render_template('personalizado.html', indice=session['indice'])
 
     elif request.method == 'POST':
         mensagem = request.form.get('msg_personalizada')
