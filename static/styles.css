@@ -1,3 +1,12 @@
+@charset "UTF-8";
+
+:root {
+    --azulzinho: #63B0AA;
+    --amarelinho: #FFE74C;
+    --rosinha: #EB9486;
+    --quasePreto: #212529;
+}
+
 body {
     background-color: #212529;
     color: white;
@@ -18,8 +27,8 @@ main {
 }
 
 header {
-    background-color: rgba(0, 0, 0, 0.5);
-    color: #63b0aa;
+    background-color: rgba(0, 0, 0, 0.438);
+    color: #EB9486;
     margin-bottom: 0;
     padding: 2rem 1rem;
     text-align: center;
@@ -93,19 +102,16 @@ h2 {
 
 a {
     font-size: 25px;
-    color: yellow;
+    color: #FFE74C;
 }
 
 a:hover {
-    color: yellow;
+    color: #FFE74C;
 }
 
 h2 > a {
-    color: yellow;
+    color: #FFE74C;
     font-size: inherit;
-}
-
-#niver {
 }
 
 #flash {
