@@ -14,7 +14,7 @@ Já o e-mail personalizado, quem digita a mensagem é o usuário. Então o e-mai
 
 ---
 
-O projeto foi desenvolvido com Python e seu framework Flask no back-end e JavaScript no front-end. O banco de dados utilizado é o SQLite. Para alguns detalhes visuais, o Bootstrap foi utilizado.
+O projeto foi desenvolvido com Python e o framework Flask no back-end e JavaScript puro no front-end. O banco de dados utilizado é o SQLite. Para alguns detalhes de design/layout, o Bootstrap foi utilizado.
 
 A hospedagem foi realizada via PythonAnywhere.
 
