@@ -1,12 +1,10 @@
-# Aniversários
+# [Aniversários](http://danilox.pythonanywhere.com)
 
 <img src="https://github.com/Danilo-Xaxa/aniversarios/blob/main/static/screenshot1.png"/>
 
 <img src="https://github.com/Danilo-Xaxa/aniversarios/blob/main/static/screenshot2.png"/>
 
-[Acesse aqui](http://danilox.pythonanywhere.com)
-
-Aniversários é uma aplicação web que registra nomes e aniversários de pessoas e manda e-mails personalizados ou padrões desejando feliz aniversário ao aniversariante do dia.
+[Aniversários](http://danilox.pythonanywhere.com) é uma aplicação web que registra nomes e aniversários de pessoas e manda e-mails personalizados ou padrões desejando feliz aniversário ao aniversariante do dia.
 
 Ao acessar o site, o usuário pode registrar o seu nome, e-mail, dia e mês de nascimento, então a página será recarregada e o registro será adicionado ao banco de dados e à tabela.
 
